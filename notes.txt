@@ -1,0 +1,128 @@
+🎲 Randomisation Structure
+
+You will mainly use Python’s random module:
+
+import random
+
+Two useful functions:
+
+random.randint(a, b)   # random number between a and b
+random.choice(list)    # randomly choose from a list
+
+Most actions can work by generating a random number and mapping it to an event.
+
+🏹 Hunt Event Logic
+
+Hunting should be high risk but high reward.
+
+Random Logic
+
+Generate a number between 1 and 100.
+
+roll = random.randint(1,100)
+Outcomes
+Roll Range	Event	Effect
+1–40	Successful hunt	Hunger -25, Energy -20
+41–70	Small catch	Hunger -10, Energy -15
+71–90	Nothing found	Energy -15
+91–100	Animal attack	Health -20, Energy -15
+Example Code
+roll = random.randint(1,100)
+
+if roll <= 40:
+    print("You caught a rabbit!")
+elif roll <= 70:
+    print("You caught a small animal.")
+elif roll <= 90:
+    print("You found nothing.")
+else:
+    print("A wild boar attacked you!")
+🎣 Fishing Event Logic
+
+Fishing should be safer but less rewarding.
+
+Random Roll
+roll = random.randint(1,100)
+Outcomes
+Roll	Event
+1–50	Good catch
+51–80	Small catch
+81–100	No fish
+Effects
+Event	Effect
+Good catch	Hunger -20, Energy -10
+Small catch	Hunger -10, Energy -10
+No fish	Energy -5
+🧭 Explore Event Logic
+
+Exploration should be high risk but can give bonuses.
+
+Random Roll
+roll = random.randint(1,100)
+Outcomes
+Roll	Event
+1–30	Find food
+31–50	Find water
+51–70	Find useful item
+71–90	Nothing
+91–100	Injury
+Effects
+Event	Effect
+Find food	Hunger -15
+Find water	Health +10
+Find item	Add item to inventory
+Nothing	Energy -10
+Injury	Health -15
+😴 Rest Logic
+
+Rest should always help, but still have small random variation.
+
+Random Roll
+energy_gain = random.randint(15,30)
+Effect
+Energy + random amount (15–30)
+Hunger +5
+🏠 Build Shelter Logic
+
+Building shelter can fail or succeed.
+
+Random Roll
+roll = random.randint(1,100)
+Outcomes
+Roll	Event
+1–70	Shelter built
+71–90	Partial progress
+91–100	Failed build
+Effects
+Event	Effect
+Built	Shelter +1
+Partial	Shelter +0.5
+Failed	Energy -15
+🌧️ End-of-Day Random Event Logic
+
+Each day there is a chance an event occurs.
+
+Step 1: Decide if an event happens
+chance = random.randint(1,100)
+Roll	Result
+1–40	Nothing
+41–100	Event happens
+Step 2: Choose event
+event = random.choice(["storm","berries","injury","good_sleep"])
+Possible Events
+Event	Effect
+Storm	Health -15 (reduced if shelter)
+Berries	Hunger -10
+Injury	Health -10
+Good sleep	Energy +10
+Hunger increases every day
+hunger += 10
+Starvation damage
+
+If hunger is too high:
+
+if hunger >= 80:
+    health -= 10
+Exhaustion damage
+if energy <= 0:
+    health -= 10

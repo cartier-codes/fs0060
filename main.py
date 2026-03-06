@@ -1,3 +1,5 @@
+import random
+
 player = {
     "name" : "",
     "health" : 100,
@@ -9,6 +11,13 @@ player = {
 }
 
 def hunt():
+    random_number = random.randint(1, 100)
+    if random_number <= 50:
+        print("You successfully hunted and found food. Your hunger has decreased by 20.")
+        player["hunger"] -= 20
+    else:
+        print("You failed to hunt and wasted energy. Your energy has decreased by 10.")
+        player["energy"] -= 10
     return
 
 def fish():
@@ -46,29 +55,17 @@ def get_user_input(prompt, input_type="string", command=False):
         valid = False
         while not valid:
             player_input = input(prompt)
-            if command:
-                if player_input not in player["actions"]:
-                    print("This input is invalid. Please enter a valid command.")
-                    continue
-                else:
-                    valid = True
-                    return player_input
-            else:
+            try:
                 if input_type == "integer":
-                    if not player_input.isdigit():
-                        print("This input is invalid. Please enter an integer.")
-                elif input_type == "float":
-                    try:
-                        float(player_input)
-                        valid = True
-                        return float(player_input)
-                    except ValueError:
-                        print("This input is invalid. Please enter a float.")
-                    continue
+                    player_input = int(player_input)
                 else:
-                    valid = True
-                    return int(player_input)
-    
+                    player_input = float(player_input)
+                valid = True
+                return player_input
+            except ValueError:
+                print("This input is invalid. Please enter a valid number.")
+                continue
+
 
 def check_stats():
     if player["health"] <= 0:
@@ -98,11 +95,27 @@ def check_day():
     if player["day"] == 10:
         print("Congratulations! You have survived for 10 days and won the game!")
         exit()
-    
+    else:
+        if player["action_count"] <= 0:
+            player["day"] += 1
+            player["action_count"] = 3
+            print("A new day has begun. Your action count has been reset to 3.")
+            player["hunger"] += 10
+            player["energy"] += 20
     return
 
 def main():
     player["name"] = get_user_input("What is your name:  ", "string")
+    game_over = False
+    while not game_over:
+        print(f"Day {player['day']}")
+        print(f"Health: {player['health']}")
+        print(f"Hunger: {player['hunger']}")
+        print(f"Energy: {player['energy']}")
+        print("Actions: " + ", ".join(player["actions"]))
+        action = get_user_input("What action would you like to take?  ", "string", True)
+        check_stats()
+        check_day()
     return
 
 main()
